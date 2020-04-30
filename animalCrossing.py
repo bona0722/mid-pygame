@@ -6,7 +6,7 @@ pygame.init() #초기화를 해줘야함.
 pygame.display.set_caption("Window size 400") #게임 제목을 써줌. 화면이 꺼지기 전까지 제목이 계속 유지되므로 전역변수로 설정하기
 screen = pygame.display.set_mode((1000,700)) #x축,y축 생성
  # 화면을 초기화하거나 화면에 데이터 추가하는 변수
-#a
+#av
 clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
 bs
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
