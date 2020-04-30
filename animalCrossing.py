@@ -45,6 +45,9 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
                 pos_y += 1
             if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
                 pos_y += 2
+
+            #change
+            
             
             screen.fill(black)
             pygame.draw.circle(screen, white, (pos_x, pos_y), 20)
