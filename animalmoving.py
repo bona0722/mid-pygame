@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((width, height)) #x축,y축 생성
  # 화면을 초기화하거나 화면에 데이터 추가하는 변수
 
 bg = pygame.image.load('image/island.png')
-img_scale = pygame.transform.scale(bg, (width, height))
+img_scale = pygame.transform.scale(bg, (width, height)) #크기변환
 clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
