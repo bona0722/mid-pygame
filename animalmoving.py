@@ -54,7 +54,6 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
         screen.fill(black)
         screen.blit(img_scale, (0,0))
         pygame.draw.circle(screen, white, (pos_x, pos_y), 20)
-        
         pygame.display.update()
 
 if __name__ == '__main__':
