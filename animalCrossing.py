@@ -45,6 +45,9 @@ class move():
                 pos_y += 1
             if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
                 pos_y += 2
+
+            #change
+            
             
             screen.fill(black)
             pygame.draw.circle(screen, white, (pos_x, pos_y), 20)
