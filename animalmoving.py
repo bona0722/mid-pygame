@@ -5,12 +5,13 @@ from pygame.locals import QUIT
 
 
 pygame.init() #초기화를 해줘야함
+width, height = 1000,700
 pygame.display.set_caption("Window size 400") #게임 제목을 써줌. 화면이 꺼지기 전까지 제목이 계속 유지되므로 전역변수로 설정하기
-screen = pygame.display.set_mode((1000,700)) #x축,y축 생성
+screen = pygame.display.set_mode((width, height)) #x축,y축 생성
  # 화면을 초기화하거나 화면에 데이터 추가하는 변수
 
-
-
+bg = pygame.image.load('image/island.png')
+img_scale = pygame.transform.scale(bg, (width, height))
 clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
@@ -51,7 +52,9 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
             pos_y += 2
 
         screen.fill(black)
+        screen.blit(img_scale, (0,0))
         pygame.draw.circle(screen, white, (pos_x, pos_y), 20)
+        
         pygame.display.update()
 
 if __name__ == '__main__':
