@@ -30,10 +30,13 @@ while not crashed:
     
     mx,my = pygame.mouse.get_pos()
     screen.fill(black)
-    pygame.draw.line(screen, white, [mx-5, my],[mx+5, my] 20)
+    pygame.draw.line(screen, white, [mx-10, my], [mx+10, my], 1)
+    pygame.draw.line(screen, white, [mx, my-10], [mx, my+10], 1)
     
     pygame.display.update()
     clock.tick(60)
+
+    
 
 pygame.quit()
 quit
