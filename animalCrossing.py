@@ -43,32 +43,7 @@ class button(): #버튼 구현 button
 
     def boundary(self): #mouse가 버튼 내 좌표에 있으면 True반환
         print(self.x, self.y , self.width, self.height)
-        # if :
-        #     return True
-# def moving(): #걷는 함수, 방향키 > 걷는다. ctrl + 방향키를 누르면 뛸 수 있다.
-#         white = (255, 255, 255)
-#         black = (0, 0, 0)
-#         pos_x= 200
-#         pos_y = 200
-#             if key_event[pygame.K_LEFT]: 
-#                 pos_x -= 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
-#                 pos_x -= 2
 
-#             if key_event[pygame.K_RIGHT]:
-#                 pos_x += 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
-#                 pos_x += 2
-
-#             if key_event[pygame.K_UP]:
-#                 pos_y -= 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
-#                 pos_y -= 2
-
-#             if key_event[pygame.K_DOWN]:
-#                 pos_y += 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-#                 pos_y += 2
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
     white = (255, 255, 255)
