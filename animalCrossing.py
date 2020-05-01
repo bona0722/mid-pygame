@@ -9,33 +9,8 @@ start_backg = pygame.image.load(os.path.join("image", "start_background.jpg")).c
 saddleBrown = (139, 69, 19) #start button color
 gray = (128,128,128)
 
-# class moveing(): #나중에 수정
 
-        # white = (255, 255, 255)
-        # black = (0, 0, 0)
-        # pos_x= 200
-        # pos_y = 200
-#             if key_event[pygame.K_LEFT]: 
-#                 pos_x -= 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
-#                 pos_x -= 2
-
-#             if key_event[pygame.K_RIGHT]:
-#                 pos_x += 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
-#                 pos_x += 2
-
-#             if key_event[pygame.K_UP]:
-#                 pos_y -= 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
-#                 pos_y -= 2
-
-#             if key_event[pygame.K_DOWN]:
-#                 pos_y += 1
-#             if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-#                 pos_y += 2
-
-class button(): #버튼 구현
+class button(): #버튼 구현 button
     def __init__(self, win, color, x, y, width, height, text = ''):
         self.color = color
         self.x = x
@@ -49,21 +24,45 @@ class button(): #버튼 구현
         
     def draw(self): #버튼을 그려줌
         pygame.draw.rect(self.win , self.color, (self.x, self.y, self.width, self.height))
-    
+
     # def text(self, text): #버튼에 폰트를 적어줌
 
 
     def boundary(self): #mouse가 버튼 내 좌표에 있으면 True반환
-        if (self.x + self.width > self.mouse[0] > self.x) and (self.y < self.mouse[1] < self.y + self.height):
+        print(self.x, self.y , self.width, self.height)
+        if :
             return True
+def moving(): #걷는 함수, 방향키 > 걷는다. ctrl + 방향키를 누르면 뛸 수 있다.
+        white = (255, 255, 255)
+        black = (0, 0, 0)
+        pos_x= 200
+        pos_y = 200
+            if key_event[pygame.K_LEFT]: 
+                pos_x -= 1
+            if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
+                pos_x -= 2
 
-# def change_color() #버튼에 마우스 커서가 올려져있으면 색상이 변한다. 선택
+            if key_event[pygame.K_RIGHT]:
+                pos_x += 1
+            if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
+                pos_x += 2
+
+            if key_event[pygame.K_UP]:
+                pos_y -= 1
+            if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
+                pos_y -= 2
+
+            if key_event[pygame.K_DOWN]:
+                pos_y += 1
+            if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
+                pos_y += 2
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
+
         start_button = button(screen, saddleBrown, 80, 50, 250, 80, '게임시작')
         guide_button = button(screen, saddleBrown, 80, 150, 250, 80, '설명')
         exit_button = button(screen, saddleBrown, 80, 250, 250, 80, '종료')
-        
+
         while True: #while로 구현
             for event in pygame.event.get(): 
                 #게임중에 마우스 클릭 등 이벤트 발생하면 인지하고 무슨 이벤트인지 for문으로 검사.
