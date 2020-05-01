@@ -64,7 +64,16 @@ class Player(pygame.sprite.Sprite):
             self.playery += 1
         if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
             self.playery += 2
- 
+
+# class Bullet(pygame.sprite.Sprite):
+#     def __init__(self, x, y, dir):
+#         super().__init__(self)
+#         self.image = pygame.Surface((6,6))
+#         self.rect = self.image.get_rect()
+#         self.rect.x = Player.playerx
+#         self.rect.y = Player.playery
+#         self.spawn_time = pygame.time.get_ticks()
+
  
 class Game(object):
     """ This class represents an instance of the game. If we need to
@@ -97,6 +106,7 @@ class Game(object):
         # Create the player
         self.player = Player()
         self.all_sprites_list.add(self.player)
+
         
     def bugs(self) :
         for i in range(2):
