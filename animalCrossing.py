@@ -9,8 +9,11 @@ screen = pygame.display.set_mode((width, height)) #x축,y축 생성
 clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
 
 saddleBrown = (139, 69, 19) #button color
-white = (255, 255, 255)
-black = (0, 0, 0)
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+green = (0,255,0)
+blue = (0,0,255)
 
 start_bg = pygame.image.load(os.path.join("image", "start_background.jpg")).convert()
 bg = pygame.image.load('image/island.png')
@@ -24,6 +27,44 @@ img_scale_market = pygame.transform.scale(market,(150,150))
 img_scale_fishzone = pygame.transform.scale(fishzone,(150,150))
 img_scale_mos = pygame.transform.scale(mos,(150,150))
 
+
+class Entity(pygame.sprite.Sprite) : #sprite init
+    def __init__(self) :
+        pygame.sprite.Sprite.__init__(self)
+
+class Player(Entity) : #player 관련 함수 및 player 기본설정
+    #sprite for the Player
+    def __init__(self) :
+        Entity.__init__(self)
+        self.image = pygame.Surface((50,50))
+        self.playerx= width/2
+        self.playery= height/2 
+        self.image.fill(green)
+        self.rect = pygame.Rect(self.playerx, self.playery, 66,92)
+        self.rect.center = (width/2, height/2)  
+
+    def update(self):
+        self.rect = pygame.Rect(self.playerx, self.playery, 66, 92)
+  
+
+    def moving(self): #걷는 함수, 방향키 > 걷는다. ctrl + 방향키를 누르면 뛸 수 있다.
+        key_event = pygame.key.get_pressed()
+        if key_event[pygame.K_LEFT]: 
+            self.playerx -= 1
+        if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
+            self.playerx -= 2
+        if key_event[pygame.K_RIGHT]:
+            self.playerx += 1
+        if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
+            self.playerx += 2
+        if key_event[pygame.K_UP]:
+            self.playery -= 1
+        if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
+            self.playery -= 2
+        if key_event[pygame.K_DOWN]:
+            self.playery += 1
+        if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
+            self.playery += 2
 
 class button(): #버튼 구현 button(screen, color, x축, y축, 가로, 세로) 
     def __init__(self, win, bColor, x, y, width, height):
@@ -53,29 +94,6 @@ class button(): #버튼 구현 button(screen, color, x축, y축, 가로, 세로)
                 return True
         return False
 
-def moving(char,pos_x, pos_y): #걷는 함수, 방향키 > 걷는다. ctrl + 방향키를 누르면 뛸 수 있다.
-    key_event = pygame.key.get_pressed()
-
-    if key_event[pygame.K_LEFT]: 
-        pos_x -= 2
-    if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
-        pos_x -= 3
-    if key_event[pygame.K_RIGHT]:
-        pos_x += 2
-    if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
-        pos_x += 3
-
-    if key_event[pygame.K_UP]:
-        pos_y -= 2
-    if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
-        pos_y -= 3
-    if key_event[pygame.K_DOWN]:
-        pos_y += 2
-    if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-        pos_y += 3
-        
-    pygame.draw.circle(screen, char, (pos_x, pos_y), 20)
-#moving 완성해줄 것
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
     
@@ -118,15 +136,6 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
                     screen.fill(black)
                     pygame.quit()
                     sys.exit()
-
-            
-            # if event.type == pygame.MOUSEBUTTONUP: #마우스 버튼을 떼면 생기는 이벤트
-            #     if start_button.boundary(pos):
-            #         print("start the game")
-            #         screen.fill(black)
-            #         screen.blit(img_scale, (0,0))
-            #         pygame.display.flip()
-        #버튼 생성
         
 
         screen.blit(start_bg, (-200,0))
@@ -134,7 +143,6 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
         start_button.draw('START', black)
         guide_button.draw('GUIDE', black)
         exit_button.draw('EXIT', black)
-        #moving(black,200, 200)
         pygame.display.update()
 
         # screen.blit(img_scale_house, (500,250))
