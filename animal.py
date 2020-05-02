@@ -4,16 +4,6 @@ from setting import *
 import time 
 from time import sleep
 import threading
-# --- Global constants ---
-# BLACK = (0, 0, 0)
-# WHITE = (255, 255, 255)
-# GREEN = (0, 255, 0)
-# RED = (255, 0, 0)
- 
-# SCREEN_WIDTH = 700
-# SCREEN_HEIGHT = 500
- 
-# --- Classes ---
  
  
 class Bug(pygame.sprite.Sprite):
@@ -63,16 +53,27 @@ class Player(pygame.sprite.Sprite):
         if key_event[pygame.K_DOWN]:
             self.playery += 1
         if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-            self.playery += 2
+            self.playery += 2    
+            
+    def shoot(self) :
+        key_event = pygame.key.get_pressed()
+        if key_event[pygame.K_SPACE] :
+            bullet = Bullet()
+            bullet.rect.x = self.playerx
+            bullet.rect.y = self.playery
 
-# class Bullet(pygame.sprite.Sprite):
-#     def __init__(self, x, y, dir):
-#         super().__init__(self)
-#         self.image = pygame.Surface((6,6))
-#         self.rect = self.image.get_rect()
-#         self.rect.x = Player.playerx
-#         self.rect.y = Player.playery
-#         self.spawn_time = pygame.time.get_ticks()
+class Bullet(pygame.sprite.Sprite):
+    """ This class represents the bullet . """
+    def __init__(self):
+        # Call the parent class (Sprite) constructor
+        super().__init__()
+        self.image = pygame.Surface([4, 10])
+        self.image.fill(black)
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        """ Move the bullet. """
+        self.rect.y -= 3
 
  
 class Game(object):
@@ -90,23 +91,13 @@ class Game(object):
         # Create sprite lists
         self.bug_list = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
- 
-        # Create the block sprites
-        # for i in range(10):
-        #     bug = Bug()
- 
-        #     bug.rect.x = random.randrange(width)
-        #     bug.rect.y = random.randrange(height)
- 
-        #     self.bug_list.add(bug)
-        #     self.all_sprites_list.add(bug)
-        # threading.Timer(2, self.bug).start()
+
+        self.bullet_list = pygame.sprite.Group()
+
         self.bugs()
- 
         # Create the player
         self.player = Player()
         self.all_sprites_list.add(self.player)
-
         
     def bugs(self) :
         for i in range(2):
@@ -128,7 +119,9 @@ class Game(object):
                 if self.game_over:
                     self.__init__()
         return False
- 
+
+
+
     def run_logic(self):
         """
         This method is run each time through the frame. It
@@ -137,19 +130,13 @@ class Game(object):
         if not self.game_over:
             # Move all the sprites
             self.all_sprites_list.update()
- 
-            # See if the player block has collided with anything.
-            bugs_hit_list = pygame.sprite.spritecollide(self.player, self.bug_list, True)
- 
-            # Check the list of collisions.
-            for block in bugs_hit_list:
-                self.score += 1
-                print(self.score)
-                # You can do something with "block" here.
- 
-            if len(self.bug_list) == 0:
+
+
+            bugs_hit_list = pygame.sprite.spritecollide(self.player, self.bug_list, False)
+            if bugs_hit_list:
                 self.game_over = True
- 
+
+
     def display_frame(self, screen):
         """ Display everything to the screen for the game. """
         screen.fill(white)
@@ -166,15 +153,6 @@ class Game(object):
             self.all_sprites_list.draw(screen)
  
         pygame.display.flip()
-
-    # def task(self) :
-    #     for i in range(3):
-    #         self.bug = pygame.sprite.Group()
-    #         a = random.randint(0,width)
-    #         b = random.randint(0,height)
-    #         bug = Bug(a, b)
-    #     threading.Timer(2, self.task).start()
- 
  
 def main():
     """ Main program function. """
@@ -199,7 +177,7 @@ def main():
  
         # Process events (keystrokes, mouse clicks, etc)
         done = game.process_events()
- 
+
         # Update object positions, check for collisions
         game.run_logic()
  
