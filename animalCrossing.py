@@ -1,49 +1,15 @@
-import pygame, sys, os
-import insertSc #event
+import pygame
+import sys
+import os
+import sprites
+from setting import *
 from pygame.locals import QUIT
 
-pygame.init() #초기화를 해줘야함.
-pygame.display.set_caption("Animal Crossing") #게임 제목을 써줌. 화면이 꺼지기 전까지 제목이 계속 유지되므로 전역변수로 설정하기
+pygame.init()
+pygame.display.set_caption("Animal Crossing")
 width, height = 1000, 700
-screen = pygame.display.set_mode((width, height)) #x축,y축 생성
- # 화면을 초기화하거나 화면에 데이터 추가하는 변수
+screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
-
-#color
-saddleBrown = (139, 69, 19) #button color
-white = (255, 255, 255)
-black = (0, 0, 0)
-
-#image
-start_bg = pygame.image.load(os.path.join("image", "start_background.jpg")).convert()
-bg = pygame.image.load('image/island.png')
-house = pygame.image.load('image/House.png')
-market = pygame.image.load('image/market.png')
-fishzone = pygame.image.load('image/fishzone.png')
-mos = pygame.image.load('image/mos.png')
-img_scale = pygame.transform.scale(bg, (width, height)) #크기변환
-img_scale_house = pygame.transform.scale(house, (150, 150))
-img_scale_market = pygame.transform.scale(market,(150,150))
-img_scale_fishzone = pygame.transform.scale(fishzone,(150,150))
-img_scale_mos = pygame.transform.scale(mos,(150,150))
-
-#icon image
-start_icon = pygame.image.load('image/start_icon.png') #start버튼
-guide_icon = pygame.image.load('image/guide_icon.png') #guide버튼
-exit_icon = pygame.image.load('image/exit_icon.png') #exit버튼
-
-#screen
-start_sc = True #첫화면
-gameMap_sc = False #게임 전체 맵
-guide_sc = False #설명서
-fish_sc = False #낚시맵 fishing
-fishG_sc = False #낚시 설명 fishing Guide
-bugHunt_sc = False #곤충맵 bug hunting
-bugG_sc = False #곤충잡기 설명 bug hunting Guide
-store_sc = False #상점맵
-storeG_sc = False #물건 구입 설명
-home_sc = False #집맵
-homeG_sc = False #집꾸미기 설명 home Interior Guide
 
 class button(): #버튼 구현 button(image, x축, y축) 
     def __init__(self, image, x, y):
@@ -63,49 +29,98 @@ class button(): #버튼 구현 button(image, x축, y축)
                 return True
         return False
 
+#시작 메뉴 스크린 버튼
+start_b = button(start_icon, 500, 550)
+guide_b = button(guide_icon, 650, 550)
+exit_b = button(exit_icon, 800, 550)
+#설명스크린 버튼
+exitG_b = button(exitG_icon, 500,50)
+keepG_b = button(keepG_icon,400, 50)
 
+# portF #낚시 포탈
+# portS #
+# portE #
+
+        #portB =  pygame.Rect(start_icon, white, 66, 92) #곤충 포탈 실험
+def start():
+    if start_sc == True:
+        screen.blit(start_bg, (-200,0))
+        start_b.draw()
+        guide_b.draw()
+        exit_b.draw()
+        pygame.display.update()
+
+def guide():
+    if guide_sc == True:
+        screen.fill(white)
+        # screen.blit(start_bg, (-200,0))  #< guide_bg 이미지 구하면 이미지에 맞춰 x축 y축 추가해주기
+        exitG_b.draw()
+        keepG_b.draw()
+        pygame.display.update()
+
+def gameMap():
+    if gameMap_sc == True: 
+        screen.blit(img_scale, (0, 0))
+        screen.blit(img_scale_sea, (0, 0))
+        screen.blit(img_scale_mos, (500, 500))
+        pygame.display.update()
+# def fish(self):
+#     if fish_sc == True:
+# def fishG(self):
+#     if fishG_sc == True:
+# def bugHunt(self):
+#     if bugHunt_sc == True:
+# def bugG(self): # 벌레잡기 설명
+#     if bugG_sc == True:
+# def store(self):
+#     if store_sc == True:
+# def storeG(self):
+#     if storeG_sc == True:
+# def home(self):
+#     if home_sc == True:
+# def homeG(self):
+#     if homeG_sc == True:
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
     clock.tick(100)
-    while True: 
+    global start_sc
+    global guide_sc
+    global gameMap_sc
+
+    while True:
+        start()
+        guide()
+        gameMap()
+        # fish()
+        # fishG()
+        # bugHunt()
+        # bugG()
+        # store()
+        # storeG()
+        # home()
+        # homeG()
 
         for event in pygame.event.get(): #게임중에 무슨 이벤트인지 for문으로 검사.
             pos = pygame.mouse.get_pos()
             
             if event.type == QUIT:
-                if exit_button:
                     pygame.quit()
                     sys.exit()
 
-            # if event.type == pygame.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
-            #     if start_button.boundary(pos):
-            #         print("clicked the start Button")
-            #         screen.fill(black)
-            #     if guide_button.boundary(pos):
-            #         print("clicked the game guide Button")
-            #         screen.fill(black)
-            #     if exit_button.boundary(pos):
-            #         print("clicked the exit Button")
-            #         screen.fill(black)
+            if event.type == pygame.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
+                if start_b.isOver(pos):
+                    start_sc = False
+                    gameMap_sc = True
+                    screen.fill(black)
 
+                elif guide_b.isOver(pos):
+                    start_sc = False
+                    guide_sc = True
+                    screen.fill(black)
 
-            if event.type == pygame.MOUSEBUTTONUP: #마우스 버튼을 떼면 생기는 이벤트
-                if start_button.isOver(pos):
-                    print("start the game")
-                    screen.fill(black)
-                if guide_button.isOver(pos):
-                    print("the game guide")
-                    screen.fill(black)
-                if exit_button.isOver(pos):
-                    print("exit the game")
-                    screen.fill(black)
+                elif exit_b.isOver(pos):
                     pygame.quit()
                     sys.exit()
-
-        #버튼 생성
-        
-
-        
 
 if __name__ == '__main__':
     main()
