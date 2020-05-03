@@ -143,9 +143,9 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
     player = Player()
     while True:
 
-        # start()
-        # guide()
-        # gameMap()
+        start()
+        guide()
+        gameMap()
         # fish()
         # fishG()
         # bugHunt()

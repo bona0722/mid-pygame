@@ -55,8 +55,12 @@ class Player(pygame.sprite.Sprite):
         if key_event[pygame.K_DOWN]:
             self.playery += 1
         if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-            self.playery += 2    
-            
+            self.playery += 2   
+        if self.rect.right > width :
+            self.rect.right = width
+        if self.rect.left < 0 :
+            self.rect.left = 0 
+
     def shoot(self) :
         key_event = pygame.key.get_pressed()
         if key_event[pygame.K_SPACE] :
@@ -196,10 +200,9 @@ def main():
  
     # Create an instance of the Game class
     game = Game()
-    start()
+    
     # Main game loop
     while not done:
-        
         # Process events (keystrokes, mouse clicks, etc)
         done = game.process_events()
 

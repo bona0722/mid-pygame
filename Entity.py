@@ -46,6 +46,7 @@ class Player(Entity) :
         if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
             self.playery += 2
 
+
 class Enemy(Entity) :
     def __init__(self) :
         Entity.__init__(self)

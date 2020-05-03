@@ -128,7 +128,7 @@ bullet_list = pygame.sprite.Group()
 
 # Create a red player block
 player = Player()
-# all_sprites_list.add(player)
+all_sprites_list.add(player)
 
 def bugs() :
     for i in range(2):

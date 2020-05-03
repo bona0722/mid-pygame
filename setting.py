@@ -31,6 +31,15 @@ market = pygame.image.load('image/market.png')
 fishzone = pygame.image.load('image/fishzone.png')
 mos = pygame.image.load('image/mos.png')
 
+#bug image
+background = pygame.image.load(os.path.join(img_folder, "treebackground.jpg")).convert()
+background_img = pygame.transform.scale(background, (WIDTH,HEIGHT))
+background_rect = background_img.get_rect()
+player_img = pygame.image.load(os.path.join(img_folder, "boy.png")).convert()
+bullet_img = pygame.image.load(os.path.join(img_folder, "bomb.png")).convert()
+bug_imgs = []
+bug_list = ['bug_one.png', 'bug_two.png', 'bug_three.png']
+
 #image_scale
 img_scale = pygame.transform.scale(bg, (width, height)) #크기변환
 img_scale_sea = pygame.transform.scale(bg_nogo, (width,height)) 
