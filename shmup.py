@@ -2,6 +2,7 @@
 import pygame
 import random
 import os
+from setting import *
 
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "image")
@@ -10,8 +11,6 @@ snd_folder = os.path.join(game_folder, "snd")
 WIDTH  = 1000
 HEIGHT = 700
 FPS = 60
-
-
 
 #define color
 WHITE = (255,255,255)
@@ -130,14 +129,6 @@ pygame.display.set_caption("My game")
 clock = pygame.time.Clock()
 
 
-# 게임 그래픽 로드
-background = pygame.image.load(os.path.join(img_folder, "treebackground.jpg")).convert()
-background_img = pygame.transform.scale(background, (WIDTH,HEIGHT))
-background_rect = background_img.get_rect()
-player_img = pygame.image.load(os.path.join(img_folder, "boy.png")).convert()
-bullet_img = pygame.image.load(os.path.join(img_folder, "bomb.png")).convert()
-bug_imgs = []
-bug_list = ['bug_one.png', 'bug_two.png', 'bug_three.png']
 
 
 for img in bug_list :

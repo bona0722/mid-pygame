@@ -45,8 +45,8 @@ class Player(pygame.sprite.Sprite):
 
         # self.rect = self.image.get_rect()
         self.image = pygame.Surface((50,50))
-        self.playerx= screen_width/2
-        self.playery= screen_height/2 
+        self.playerx= float(screen_width/2)
+        self.playery= float(screen_height/2)
         self.image.fill(RED) #플레이어 이미지 필요 
         self.rect = pygame.Rect(self.playerx, self.playery, 50,50)
         self.rect.center = (screen_width/2, screen_height/2)
@@ -74,8 +74,6 @@ class Player(pygame.sprite.Sprite):
                 self.playery += 1
             if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
                 self.playery += 2 
-
-
 
 class Bullet(pygame.sprite.Sprite):
     """ This class represents the bullet . """

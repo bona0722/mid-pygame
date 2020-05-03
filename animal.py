@@ -5,7 +5,9 @@ import time
 from time import sleep
 import threading
  
- 
+width, height = 1000, 700
+screen = pygame.display.set_mode((width, height))
+
 class Bug(pygame.sprite.Sprite):
     """ This class represents a simple block the player collects. """
  
@@ -79,7 +81,24 @@ class Bullet(pygame.sprite.Sprite):
         """ Move the bullet. """
         self.rect.y -= 3
 
- 
+class button(): #버튼 구현 button(image, x축, y축) 
+    def __init__(self, image, x, y):
+        self.x = x
+        self.y = y
+        self.image = image
+        
+    def draw(self): #draw()
+        screen.blit(self.image, (self.x,self.y))
+
+    def isOver(self, pos): #mouse가 버튼 내 좌표에 있으면 True반환. boundary(pygame.mouse.get_pos()
+        width = self.image.get_width()
+        height = self.image.get_height()
+
+        if pos[0] < self.x + width and pos[0] > self.x:
+            if pos[1] < self.y + height and pos[1] > self.y:
+                return True
+        return False
+start_b = button(start_icon, 500, 550)
 class Game(object):
     """ This class represents an instance of the game. If we need to
         reset the game we'd just need to create a new instance of this
@@ -155,9 +174,15 @@ class Game(object):
  
         if not self.game_over:
             self.all_sprites_list.draw(screen)
- 
+        
         pygame.display.flip()
- 
+def start():
+    if start_sc == True:
+        screen.blit(start_bg, (-200,0))
+        # start_b.draw()
+        # guide_b.draw()
+        # exit_b.draw()
+        pygame.display.update()
 def main():
     """ Main program function. """
     # Initialize Pygame and set up the window
@@ -165,7 +190,7 @@ def main():
  
     size = [width, height]
     screen = pygame.display.set_mode(size)
- 
+    
     pygame.display.set_caption("My Game")
     pygame.mouse.set_visible(False)
  
