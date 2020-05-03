@@ -12,7 +12,6 @@ HEIGHT = 700
 FPS = 60
 
 
-
 #define color
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -31,6 +30,25 @@ def draw_text(surf, text, size, x, y) :
     text_rect.midtop = (x,y)
     surf.blit(text_surface, text_rect)
 
+def newbug():
+    b = Bug()
+    all_sprites.add(b)
+    bugs.add(b)
+
+def draw_shield_bar(surf, x, y, pct) :
+    if pct < 0 :
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT =10
+    fill = (pct/100)*BAR_LENGTH
+    #채워질 사각형
+    outline_rect = pygame.Rect(x,y,BAR_LENGTH, BAR_HEIGHT)
+    #채워진 사각형
+    fill_rect = pygame.Rect(x,y,fill, BAR_HEIGHT)
+    pygame.draw.rect(surf, GREEN, fill_rect)
+    pygame.draw.rect(surf, WHITE, outline_rect, 2)
+
+
 class Player(pygame.sprite.Sprite) : #player
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -43,6 +61,7 @@ class Player(pygame.sprite.Sprite) : #player
         self.rect.centerx = WIDTH/2
         self.rect.bottom = HEIGHT - 100
         self.speedx = 0
+        self.shield = 100
         
     
     def update(self) :
@@ -62,6 +81,7 @@ class Player(pygame.sprite.Sprite) : #player
         bullet = Bullet(self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        shoot_snd.play()
 
 class Bug(pygame.sprite.Sprite):
     def __init__(self):
@@ -129,6 +149,21 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My game")
 clock = pygame.time.Clock()
 
+#gameover screen
+def show_go_screen():
+    screen.blit(background_img, background_rect)
+    draw_text(screen, "CATCH BUGS", 64,WIDTH/2, HEIGHT/4)
+    draw_text(screen, "Arrow keys move, Space to fire", 22,WIDTH/2, HEIGHT/2)
+    draw_text(screen, "Press a key to begin", 18, WIDTH/2, HEIGHT*3/4)
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pygame.event.get() :
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False
 
 # 게임 그래픽 로드
 background = pygame.image.load(os.path.join(img_folder, "treebackground.jpg")).convert()
@@ -144,7 +179,7 @@ for img in bug_list :
     bug_imgs.append(pygame.image.load(os.path.join(img_folder, img)).convert())
 
 #모든 게임 사운드
-#   
+shoot_snd = pygame.mixer.Sound(os.path.join(snd_folder,'hit.wav'))
 
 all_sprites = pygame.sprite.Group()
 bugs  = pygame.sprite.Group()
@@ -153,17 +188,34 @@ player = Player()
 all_sprites.add(player)
 
 
-for i in range(4) :
-    b = Bug()
-    all_sprites.add(b)
-    bugs.add(b)
+for i in range(6) :
+    newbug()
 
 #점수
 score = 0
 
 #Game loop
+
+#게임이 시작할지 말지 , 끝났을 때 어떻게 해야하는지 말해줌
+game_over = True
 running = True
 while running :
+    if game_over :
+        show_go_screen()#game over screen
+        game_over = False
+        all_sprites = pygame.sprite.Group()
+        bugs  = pygame.sprite.Group()
+        bullets = pygame.sprite.Group()
+        player = Player()
+        all_sprites.add(player)
+
+
+        for i in range(4) :
+            newbug()
+
+        #점수
+        score = 0
+
     #keep loop running at the right speed
     clock.tick(FPS)
     #process input(events)
@@ -183,20 +235,22 @@ while running :
     
     for hit in hits :
         score += hit.radius
-        b = Bug()
-        all_sprites.add(b)
-        bugs.add(b)
+        newbug()
 
     #check to see if a bug hit the player
-    hits = pygame.sprite.spritecollide(player, bugs, False, pygame.sprite.collide_circle)
-    if hits: #player랑 bug랑 부딪히면 running False로!
-        running = False
+    hits = pygame.sprite.spritecollide(player, bugs, True, pygame.sprite.collide_circle)
+    for hit in hits: #player랑 bug랑 부딪히면 running False로!
+        player.shield -= 30
+        if player.shield <= 0 :
+            game_over = True
+            # running = False
 
     #draw / render
     screen.fill(BLACK)
     screen.blit(background_img, background_rect)
     all_sprites.draw(screen) 
     draw_text(screen, str(score), 18, WIDTH/2, 10)
+    draw_shield_bar(screen, 5,5, player.shield)
     #after drawing everything flip the display
     pygame.display.flip()
 
