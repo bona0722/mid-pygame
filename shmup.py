@@ -1,23 +1,16 @@
 # Shmup game
 import pygame
 import random
+import sys
 import os
+from setting_ho import *
+from pygame.locals import QUIT
 
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "image")
 snd_folder = os.path.join(game_folder, "snd")
 
-WIDTH  = 1000
-HEIGHT = 700
-FPS = 60
 
-
-#define color
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-RED = (255,0,0)
-GREEN = (0,255,0)
-BLUE = (0,0,255)
 #text가 필요할 떄마다 쓸 수 있음!
 #일반 글꼴 사용
 font_name = pygame.font.match_font('arial')
@@ -48,6 +41,53 @@ def draw_shield_bar(surf, x, y, pct) :
     pygame.draw.rect(surf, GREEN, fill_rect)
     pygame.draw.rect(surf, WHITE, outline_rect, 2)
 
+class button(): #버튼 구현 button(image, x축, y축) 
+    def __init__(self, image, x, y):
+        self.x = x
+        self.y = y
+        self.image = image
+        
+    def draw(self): #draw()
+        screen.blit(self.image, (self.x,self.y))
+
+    def isOver(self, pos): #mouse가 버튼 내 좌표에 있으면 True반환. boundary(pygame.mouse.get_pos()
+        width = self.image.get_width()
+        height = self.image.get_height()
+
+        if pos[0] < self.x + width and pos[0] > self.x:
+            if pos[1] < self.y + height and pos[1] > self.y:
+                return True
+        return False
+
+
+#시작 메뉴 스크린 버튼
+start_b = button(start_icon, 500, 550)
+guide_b = button(guide_icon, 650, 550)
+exit_b = button(exit_icon, 800, 550)
+#설명스크린 버튼
+exitG_b = button(exitG_icon, 500,50)
+keepG_b = button(keepG_icon,400, 50)
+
+# portF #낚시 포탈
+# portS #
+# portE #
+
+#portB =  pygame.Rect(start_icon, white, 66, 92) #곤충 포탈 실험
+def start():
+    if start_sc == True:
+        screen.blit(start_bg, (-200,0))
+        start_b.draw()
+        guide_b.draw()
+        exit_b.draw()
+        pygame.display.update()
+
+def guide():
+    if guide_sc == True:
+        screen.fill(WHITE)
+        # screen.blit(start_bg, (-200,0))  #< guide_bg 이미지 구하면 이미지에 맞춰 x축 y축 추가해주기
+        exitG_b.draw()
+        keepG_b.draw()
+        pygame.display.update()
 
 class Player(pygame.sprite.Sprite) : #player
     def __init__(self):
@@ -199,7 +239,35 @@ score = 0
 #게임이 시작할지 말지 , 끝났을 때 어떻게 해야하는지 말해줌
 game_over = True
 running = True
+start_sc = True
+guide_sc = True
+st = True
+while st :
+    start()
+    for event in pygame.event.get(): #게임중에 무슨 이벤트인지 for문으로 검사.
+            pos = pygame.mouse.get_pos()
+            
+            if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
+                if start_b.isOver(pos):
+                    start_sc = False
+                    gameMap_sc = True
+                    st = False
+
+                elif guide_b.isOver(pos):
+                    start_sc = False
+                    guide_sc = True
+                    guide()
+
+                elif exit_b.isOver(pos):
+                    pygame.quit()
+                    sys.exit()
+
+
 while running :
+
     if game_over :
         show_go_screen()#game over screen
         game_over = False
@@ -210,7 +278,7 @@ while running :
         all_sprites.add(player)
 
 
-        for i in range(4) :
+        for i in range(6) :
             newbug()
 
         #점수
