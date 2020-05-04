@@ -3,13 +3,14 @@ import pygame
 import random
 import sys
 import os
-from setting_ho import *
+
+import setting
 from pygame.locals import QUIT
+from setting import *
 
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "image")
 snd_folder = os.path.join(game_folder, "snd")
-
 
 #text가 필요할 떄마다 쓸 수 있음!
 #일반 글꼴 사용
@@ -203,14 +204,6 @@ def show_go_screen():
             if event.type == pygame.KEYUP:
                 waiting = False
 
-# 게임 그래픽 로드
-background = pygame.image.load(os.path.join(img_folder, "treebackground.jpg")).convert()
-background_img = pygame.transform.scale(background, (WIDTH,HEIGHT))
-background_rect = background_img.get_rect()
-player_img = pygame.image.load(os.path.join(img_folder, "boy.png")).convert()
-bullet_img = pygame.image.load(os.path.join(img_folder, "bomb.png")).convert()
-bug_imgs = []
-bug_list = ['bug_one.png', 'bug_two.png', 'bug_three.png']
 
 
 for img in bug_list :
