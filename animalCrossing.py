@@ -1,63 +1,93 @@
-import pygame
+import pygame as pg
 import sys
-import os
+from os import path
 from setting import *
+from tilemap import *
+from sprites import *
 from pygame.locals import QUIT
 
-pygame.init()
-pygame.display.set_caption("Animal Crossing")
-width, height = 1000, 700
-screen = pygame.display.set_mode((width, height))
-clock = pygame.time.Clock() #< #화면을 초 당 몇 번 출력하는지. 게임의 fps설정 가능
 
-screen_width = 700
-screen_height = 400
-
-class Entity(pygame.sprite.Sprite) : #sprite init
-    def __init__(self) :
-        pygame.sprite.Sprite.__init__(self)
-
-class Player(pygame.sprite.Sprite):
-    """ This class represents the Player. """
-
+class Game:
     def __init__(self):
-        """ Set up the player on creation. """
-        # Call the parent class (Sprite) constructor
-        super().__init__()
+        pg.init()
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption('Animal Crossing')
+        self.clock = pg.time.Clock()
+        pg.key.set_repeat(500, 100)
+        self.load_data()
 
-        self.image = pygame.Surface([20, 15])
-        self.image.fill(blue)
-        self.rect = self.image.get_rect()
-        self.image = pygame.Surface((50,50))
-        self.playerx= (screen_width/2) #rect 좌표
-        self.playery= (screen_height/2)
-        self.rect.center = (screen_width/2, screen_height/2)
+    def load_data(self):
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, 'image')
+        gameMap_folder = path.join(game_folder, 'maps')
+        self.map = TiledMap(path.join(gameMap_folder, 'gameMap.tmx'))
+        self.map_img = self.map.make_map()
+        self.map_rect = self.map_img.get_rect()
+        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        self.player_img_scale = pg.transform.scale(self.player_img, (TILESIZE * 2 , TILESIZE * 2))
+
+    def new(self):
+        # initialize all variables and do all the setup for a new game
+        self.all_sprites = pg.sprite.Group()
+        self.walls = pg.sprite.Group()
+        # for row, tiles in enumerate(self.map.data): #row == index valud, tiles == string of the characters
+        #     for col, tile in enumerate(tiles):
+        #         if tile == 'S': # 벽 설정
+        #             Wall(self, col, row)
+        #         if tile == 'P':
+        #             self.player = Player(self,col,row) #player위치 설정 가능 #0,0이면 맨 왼쪽 상단에 만들어짐
+        self.player = Player(self, 5, 5) #player 위치 임시
+        self.camera = Camera(self.map.width, self.map.height)
+
+    def run(self):
+        # game loop - set self.playing = False to end the game
+        self.playing = True
+        while self.playing:
+            self.dt = self.clock.tick(FPS) / 1000
+            self.events()
+            self.update()
+            self.draw()
+
+    def quit(self):
+        pg.quit()
+        sys.exit()
 
     def update(self):
-        """ Update the player's position. """
-        # Get the current mouse position. This returns the position
-        # as a list of two numbers.
-        self.rect = pygame.Rect(self.playerx, self.playery, 50,50)
-        if 0< self.playerx < screen_width and 0<self.playery<screen_height:
-            key_event = pygame.key.get_pressed()
-            if key_event[pygame.K_LEFT]: 
-                self.playerx -= 1
-            if key_event[pygame.K_LCTRL] and key_event[pygame.K_LEFT]:
-                self.playerx -= 2
-            if key_event[pygame.K_RIGHT]:
-                self.playerx += 1
-            if key_event[pygame.K_LCTRL] and key_event[pygame.K_RIGHT]:
-                self.playerx += 2
-            if key_event[pygame.K_UP]:
-                self.playery -= 1
-            if key_event[pygame.K_LCTRL] and key_event[pygame.K_UP]:
-                self.playery -= 2
-            if key_event[pygame.K_DOWN]:
-                self.playery += 1
-            if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
-                self.playery += 2 
+        # update portion of the game loop
+        self.all_sprites.update()
+        self.camera.update(self.player) #player추적
 
-all_sprites_list = pygame.sprite.Group()
+    def draw_grid(self): #루프를 위해서 두 개 만듬
+        for x in range(0, WIDTH, TILESIZE):
+            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
+        for y in range(0, HEIGHT, TILESIZE): #높이
+            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+
+    def draw(self):
+        # self.screen.fill(BGCOLOR)
+        self.screen.blit(self.map_ing, self.camera.apply_rect(self.map_rect)) #it is not sprite add function o camera class
+        # self.draw_grid()
+        # self.all_sprites.draw(self.screen)
+        for sprite in self.all_sprites: # 모든 sprite 화면에 표시 location 나타냄
+            self.screen.blit(sprite.image, self.camera.apply(sprite))#카메라 가져와서 스프라이트에 적용
+        pg.display.flip()
+        
+
+    def events(self):
+        # catch all events here
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.quit()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    self.quit()
+
+    def show_start_screen(self):
+        pass
+
+    def show_go_screen(self):
+        pass
+
 class button(): #버튼 구현 button(image, x축, y축) 
     def __init__(self, image, x, y):
         self.x = x
@@ -65,7 +95,7 @@ class button(): #버튼 구현 button(image, x축, y축)
         self.image = image
         
     def draw(self): #draw()
-        screen.blit(self.image, (self.x,self.y))
+        g.screen.blit(self.image, (self.x,self.y))
 
     def isOver(self, pos): #mouse가 버튼 내 좌표에 있으면 True반환. boundary(pygame.mouse.get_pos()
         width = self.image.get_width()
@@ -75,8 +105,7 @@ class button(): #버튼 구현 button(image, x축, y축)
             if pos[1] < self.y + height and pos[1] > self.y:
                 return True
         return False
-
-
+        
 #시작 메뉴 스크린 버튼
 start_b = button(start_icon, 500, 550)
 guide_b = button(guide_icon, 650, 550)
@@ -88,35 +117,31 @@ keepG_b = button(keepG_icon,400, 50)
 # portF #낚시 포탈
 # portS #
 # portE #
-
-        #portB =  pygame.Rect(start_icon, white, 66, 92) #곤충 포탈 실험
+g = Game()
+        #portB =  pygame.Rect(start_icon, WHITE, 66, 92) #곤충 포탈 실험
 def start():
     if start_sc == True:
-        screen.blit(start_bg, (-200,0))
+        g.screen.blit(start_bg, (-200,0))
         start_b.draw()
         guide_b.draw()
         exit_b.draw()
-        pygame.display.update()
+        pg.display.update()
 
 def guide():
     if guide_sc == True:
-        screen.fill(white)
+        g.screen.fill(WHITE)
         # screen.blit(start_bg, (-200,0))  #< guide_bg 이미지 구하면 이미지에 맞춰 x축 y축 추가해주기
         exitG_b.draw()
         keepG_b.draw()
-        pygame.display.update()
+        pg.display.update()
 
 def gameMap():
-    global all_sprites_list
-    
     if gameMap_sc == True: 
-        screen.blit(img_scale, (0, 0))
-        screen.blit(img_scale_sea, (0, 0))
-        screen.blit(img_scale_mos, (500, 500))
-        player = Player()
-        all_sprites_list.add(player)
-        all_sprites_list.update()
-        pygame.display.update()
+        g.new()
+        g.run()
+        g.show_go_screen()
+        pg.display.update()
+
 
 # def fish(self):
 #     if fish_sc == True:
@@ -136,11 +161,12 @@ def gameMap():
 #     if homeG_sc == True:
 
 def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설정이나 사용자의 게임 알고리즘이 여기서 작성돼야함
-    clock.tick(100)
+
+    g.clock.tick()
     global start_sc
     global guide_sc
     global gameMap_sc
-    player = Player()
+    
     while True:
 
         start()
@@ -155,31 +181,29 @@ def main(): #게임을 실행할 때 게임에서 발생한 event에 대한 설�
         # home()
         # homeG()
 
-        for event in pygame.event.get(): #게임중에 무슨 이벤트인지 for문으로 검사.
-            pos = pygame.mouse.get_pos()
+        for event in pg.event.get(): #게임중에 무슨 이벤트인지 for문으로 검사.
+            pos = pg.mouse.get_pos()
             
             if event.type == QUIT:
-                    pygame.quit()
+                    pg.quit()
                     sys.exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
+            if event.type == pg.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
                 if start_b.isOver(pos):
                     start_sc = False
                     gameMap_sc = True
 
-                    screen.fill(black)
+                    g.screen.fill(BLACK)
 
                 elif guide_b.isOver(pos):
                     start_sc = False
                     guide_sc = True
-                    screen.fill(black)
+                    g.screen.fill(BLACK)
 
                 elif exit_b.isOver(pos):
-                    pygame.quit()
+                    pg.quit()
                     sys.exit()
-
-
-        pygame.display.flip()
+        pg.display.flip()
 
 if __name__ == '__main__':
     main()

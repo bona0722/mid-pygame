@@ -1,5 +1,5 @@
 # Shmup game
-import pygame
+import pygame as pg
 import random
 import os
 from setting import *
