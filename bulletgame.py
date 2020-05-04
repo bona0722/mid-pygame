@@ -6,7 +6,7 @@
  http://programarcadegames.com/
  http://simpson.edu/computer-science/
 
- Explanation video: http://youtu.be/PpdJjaiLX6A
+ Explanation  video: http://youtu.be/PpdJjaiLX6A
 """
 import pygame
 import random
