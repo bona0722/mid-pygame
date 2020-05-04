@@ -180,8 +180,6 @@ class Bullet(pygame.sprite.Sprite) : #총알
             self.kill() #sprite를 가져와서 그룹에서 제거하는 명령
          
 
-    
-
 #초기화 pygame and create window
 pygame.init()
 pygame.mixer.init() #소리에 필수

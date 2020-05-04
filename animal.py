@@ -1,6 +1,6 @@
 import pygame
 import random
-from setting import *
+from setting_ho import *
 import time 
 from time import sleep
 import threading
@@ -20,19 +20,19 @@ class Bug(pygame.sprite.Sprite):
         self.rect.y = y
 
     def update(self) :
-        a = random.randint(0,width)
-        b = random.randint(0,height)
+        a = random.randint(0,WIDTH)
+        b = random.randint(0,HEIGHT)
 
 class Player(pygame.sprite.Sprite):
     """ This class represents the player. """
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((50,50))
-        self.playerx= width/2
-        self.playery= height/2 
-        self.image.fill(green) #플레이어 이미지 필요 
+        self.playerx= WIDTH/2
+        self.playery= HEIGHT/2 
+        self.image.fill(GREEN) #플레이어 이미지 필요 
         self.rect = pygame.Rect(self.playerx, self.playery, 50,50)
-        self.rect.center = (width/2, height/2)  
+        self.rect.center = (WIDTH/2, HEIGHT/2)  
  
     def update(self):
         # """ Update the player location. """
@@ -54,8 +54,8 @@ class Player(pygame.sprite.Sprite):
             self.playery += 1
         if key_event[pygame.K_LCTRL] and key_event[pygame.K_DOWN]:
             self.playery += 2   
-        if self.rect.right > width :
-            self.rect.right = width
+        if self.rect.right > WIDTH :
+            self.rect.right = WIDTH
         if self.rect.left < 0 :
             self.rect.left = 0 
 
@@ -72,7 +72,7 @@ class Bullet(pygame.sprite.Sprite):
         # Call the parent class (Sprite) constructor
         super().__init__()
         self.image = pygame.Surface([4, 10])
-        self.image.fill(black)
+        self.image.fill(BLACK)
         self.rect = self.image.get_rect()
 
     def update(self):
@@ -105,8 +105,8 @@ class Game(object):
         
     def bugs(self) :
         for i in range(2):
-            a = random.randrange(width)
-            b = random.randrange(height)
+            a = random.randrange(WIDTH)
+            b = random.randrange(HEIGHT)
             bug = Bug(a, b)
             self.bug_list.add(bug)
             self.all_sprites_list.add(bug)
@@ -143,14 +143,14 @@ class Game(object):
 
     def display_frame(self, screen):
         """ Display everything to the screen for the game. """
-        screen.fill(white)
+        screen.fill(WHITE)
  
         if self.game_over:
             # font = pygame.font.Font("Serif", 25)
             font = pygame.font.SysFont("serif", 25)
-            text = font.render("Game Over, click to restart", True, black)
-            center_x = (width // 2) - (text.get_width() // 2)
-            center_y = (height // 2) - (text.get_height() // 2)
+            text = font.render("Game Over, click to restart", True, BLACK)
+            center_x = (WIDTH // 2) - (text.get_width() // 2)
+            center_y = (HEIGHT // 2) - (text.get_height() // 2)
             screen.blit(text, [center_x, center_y])
  
         if not self.game_over:
@@ -163,7 +163,7 @@ def main():
     # Initialize Pygame and set up the window
     pygame.init()
  
-    size = [width, height]
+    size = [WIDTH, HEIGHT]
     screen = pygame.display.set_mode(size)
  
     pygame.display.set_caption("My Game")
