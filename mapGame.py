@@ -4,14 +4,15 @@ from tilemap import *
 from setting import *
 from sprites import *
 from os import path
+
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption(TITLE)
-        self.clock = pg.time.Clock()
-        pg.key.set_repeat(500, 100)
-        self.load_data()
+        # self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        # pg.display.set_caption('Animal Crossing')
+        # self.clock = pg.time.Clock()
+        # pg.key.set_repeat(500, 100)
+        # self.load_data()
 
     def load_data(self):
         game_folder = path.dirname(__file__)
@@ -78,8 +79,3 @@ class Game:
 
     def show_go_screen(self):
         pass
-
-# create the game object
-g = Game()
-g.show_start_screen()
-while True:
