@@ -153,18 +153,18 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-class Raccoon(pg.sprite.Sprite):
-    def __init__(self, game, x, y) :
-        self.groups = game.all_sprites, game.raccoon_dog
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = game.raccoon_img
-        self.rect = self.image.get_rect()
-        self.pos = vec(x, y)
-        self.rect.center = self.pos
-    def update(self) :
-        # self.image = pg.transform.scale(self.game.raccoon_img, )
-        self.rect.center = self.pos
+# class Raccoon(pg.sprite.Sprite):
+#     def __init__(self, game, x, y) :
+#         self.groups = game.all_sprites, game.raccoon_dog
+#         pg.sprite.Sprite.__init__(self, self.groups)
+#         self.game = game
+#         self.image = game.raccoon_img
+#         self.rect = self.image.get_rect()
+#         self.pos = vec(x, y)
+#         self.rect.center = self.pos
+#     def update(self) :
+#         # self.image = pg.transform.scale(self.game.raccoon_img, )
+#         self.rect.center = self.pos
 
 class Tree(pg.sprite.Sprite) :
     def __init__(self, game, x, y) :

@@ -141,10 +141,10 @@ class Game:
                              ,tile_object.y+ tile_object.height / 2)
             if tile_object.name == 'player':
                 self.player = Player_1(self, tile_object.x, tile_object.y)
-            if tile_object.name == 'raccoon_dog' :
-                Raccoon(self, tile_object.x, tile_object.y)
-                Obstacle(self, tile_object.x, tile_object.y, 
-                    5, 5)
+            # if tile_object.name == 'raccoon_dog' :
+            #     Raccoon(self, tile_object.x, tile_object.y)
+            #     Obstacle(self, tile_object.x, tile_object.y, 
+            #         5, 5)
             if tile_object.name == 'trees' :
                 Tree(self, tile_object.x, tile_object.y)
                 Obstacle(self, tile_object.x, tile_object.y, 
@@ -156,7 +156,7 @@ class Game:
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, 
                         tile_object.width, tile_object.height)
-            if tile_object.name in ['apple','bug1', 'bug2', 'bug3']:
+            if tile_object.name in ['apple','bug1', 'bug2', 'bug3', 'raccoon_dog']:
                 Item(self, obj_center, tile_object.name)
         self.camera = Camera(self.map.width, self.map.height)
 
@@ -176,6 +176,7 @@ class Game:
 
     def update(self):
         global score
+        ending_b = button(ending, 0, 0)
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player) #player추적
@@ -195,13 +196,14 @@ class Game:
             if hit.type == 'bug3' and keys[pg.K_SPACE]:
                 hit.kill()
                 score += BUG3_AMOUNT
+            if hit.type == 'raccoon_dog' and keys[pg.K_SPACE]:
+                if score >= 1390: 
+                    break
+                elif score > 1000:
+                    break
+                else: 
+                    break
 
-
-    def draw_grid(self): #루프를 위해서 두 개 만듬
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE): #높이
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
         global money_b
@@ -283,17 +285,21 @@ clock = pg.time.Clock()
 
 def start():
     if start_sc == True:
+        pg.mixer.Sound.play(intro_bgm)
         g.screen.blit(start_bg, (0,0))
         start_b.draw()
         guide_b.draw()
         exit_b.draw()
         pg.display.update()
-
+    else : 
+        pg.mixer.Sound.stop(intro_bgm)
 gC = 0 #guide 스크린 전환 카운트
 def guide():
     global gC
     global guide_sc
     if guide_sc == True:
+        pg.mixer.Sound.play(nbt)
+
         if gC == 0:
             g.screen.blit(guide_1,(0, 0))
             exitG_b.draw()
@@ -306,25 +312,27 @@ def guide():
         if gC == 2:
             g.screen.blit(guide_3,(0, 0))
             backG_b.draw()
-            exitG_b.draw()           
+            exitG_b.draw() 
+    else : 
+        pg.mixer.Sound.stop(nbt)          
        
 
 def gameMap():
     global gameMap_sc
     if gameMap_sc == True: 
+        pg.mixer.Sound.play(main_bgm)
         g.new()
         g.run()
         pg.display.update()
-
-
-
-
+    else : 
+        pg.mixer.Sound.stop(main_bgm)
 g = Game()
 
 g.clock.tick()
 
 # score = 100
 while True:
+    
     start()
     guide()
     gameMap()
@@ -336,6 +344,7 @@ while True:
         if event.type == QUIT:
                 pg.quit()
                 sys.exit()
+
         if event.type == pg.MOUSEBUTTONDOWN: #마우스로 버튼 클릭시 이벤트
             if start_b.isOver(pos):
                 start_sc = False
@@ -359,11 +368,9 @@ while True:
                 guide_sc = False
                 start_sc = True
                 g.screen.fill(BLACK)
-            # if bug_b.isOver(pos):
-            #     gameMap_sc = False
-            #     bugHunt_sc = True
-            #     g.screen.fill(BLACK)
-                
+            
             pg.display.update()
+        
+            
     pg.display.flip()
 

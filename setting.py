@@ -108,8 +108,9 @@ bullet_img = pg.image.load( "image/bomb.png")
 bug_imgs = []
 bug_list = ['bug_one.png', 'bug_two.png', 'bug_three.png']
 
-
-
+#finish
+ending = pg.image.load("image/ending.png")
+ending = pg.transform.scale(ending, (WIDTH, HEIGHT))
 #나무 이미지
 appletree_img = 'AppleTree.png'
 tree_img = 'Tree.png'
@@ -126,13 +127,20 @@ guide_sc = False #설명서
 gameMap_sc = False #게임 전체 맵
 
 
+#sound
+pg.mixer.init()
+main_bgm = pg.mixer.Sound('snd/animalcrossing_bgm.wav')
+intro_bgm = pg.mixer.Sound('snd/animalcrossing_intro.wav')
+hit = pg.mixer.Sound('snd/hit.wav')
+nbt = pg.mixer.Sound('snd/nabi_bobet_tau.wav')
+runing = pg.mixer.Sound('snd/Run.wav')
 
 #layer
 ITEMS_LAYER = 1
 
 #items
-ITEM_IMAGES = {'apple': 'apple.png', 'bug1' : 'bug_one.png', 'bug2' : 'bug_two.png','bug3' : 'bug_three.png', 'raccoon', 'raccoon.png'}
+ITEM_IMAGES = {'apple': 'apple.png', 'bug1' : 'bug_one.png', 'bug2' : 'bug_two.png','bug3' : 'bug_three.png', 'raccoon_dog' : 'raccoon.png'}
 APPLE_AMOUNT = 50
-BUG1_AMOUNT = 10
-BUG2_AMOUNT = 30
-BUG3_AMOUNT = 50
+BUG1_AMOUNT = 20
+BUG2_AMOUNT = 60
+BUG3_AMOUNT = 100
